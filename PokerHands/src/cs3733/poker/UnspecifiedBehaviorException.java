@@ -2,6 +2,8 @@ package cs3733.poker;
 
 public class UnspecifiedBehaviorException extends RuntimeException {
 
+	private static final long serialVersionUID = 1L;
+
 	public UnspecifiedBehaviorException(String string) {
 		super(string);
 	}

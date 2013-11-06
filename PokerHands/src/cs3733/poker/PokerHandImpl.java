@@ -11,8 +11,6 @@
 
 package cs3733.poker;
 
-import java.util.EnumMap;
-
 /**
  * This class implements the PokerHand interface. Students are free to add any
  * methods to this class, but they must implement those methods that are defined
