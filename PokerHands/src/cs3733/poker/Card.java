@@ -22,6 +22,10 @@ package cs3733.poker;
  */
 public class Card
 {
+	
+	private CardRank rank;
+	private CardSuit suit;
+	
 	/**
 	 * Constructor that sets the values of the card's properties.
 	 * @param rank the card's rank
@@ -29,7 +33,8 @@ public class Card
 	 */
 	public Card(CardRank rank, CardSuit suit)
 	{
-		// TODO: Implement this constructor.
+		this.rank = rank;
+		this.suit = suit;
 	}
 
 	/**
@@ -37,8 +42,7 @@ public class Card
 	 */
 	public CardRank getRank()
 	{
-		// TODO: Implement this method.
-		return null;
+		return rank;
 	}
 
 	/**
@@ -46,7 +50,6 @@ public class Card
 	 */
 	public CardSuit getSuit()
 	{
-		// TODO: Implement this method.
-		return null;
+		return suit;
 	}
 }

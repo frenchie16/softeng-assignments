@@ -11,6 +11,8 @@
 
 package cs3733.poker;
 
+import java.util.EnumMap;
+
 /**
  * This class implements the PokerHand interface. Students are free to add any
  * methods to this class, but they must implement those methods that are defined
@@ -23,9 +25,12 @@ public class PokerHandImpl implements PokerHand
 	 * Default constructor
 	 * @param cards the five cards
 	 */
+	
+	private final Card[] cards;
+	
 	public PokerHandImpl(Card[] cards) 
 	{
-		// TODO: Implement this constructor.
+		this.cards = cards;
 	}
 	
 	/*
@@ -34,8 +39,7 @@ public class PokerHandImpl implements PokerHand
 	@Override
 	public boolean beats(PokerHand other)
 	{
-		// TODO Implement this method.
-		return false;
+		return new HandClassification(cards).compareTo(new HandClassification(other.getCards())) > 0;
 	}
 
 	/*
@@ -44,8 +48,6 @@ public class PokerHandImpl implements PokerHand
 	@Override
 	public Card[] getCards()
 	{
-		// TODO Implement this method.
-		return null;
+		return cards;
 	}
-
 }
