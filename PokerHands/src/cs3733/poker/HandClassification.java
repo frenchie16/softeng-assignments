@@ -235,7 +235,7 @@ public class HandClassification implements Comparable<HandClassification>{
 				int rankComparison = myRankIterator.next().compareTo(otherRankIterator.next());
 				if(rankComparison != 0) return rankComparison;
 			}
-			throw new UnspecifiedBehaviorException("Two hands were precisely tied. The chances of this happening are astronomically low. I call bullshit.");
+			return 0;
 		} else {
 			return typeComparison;
 		}
