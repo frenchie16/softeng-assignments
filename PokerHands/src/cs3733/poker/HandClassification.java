@@ -16,7 +16,7 @@ public class HandClassification implements Comparable<HandClassification>{
 
 		private static final long serialVersionUID = 1L;
 
-		public RankCountMap(SortedSet<Card> cardSet) {
+		private RankCountMap(SortedSet<Card> cardSet) {
 			super(CardRank.class);
 			for(Card c : cardSet){
 				Integer currentCount = get(c.getRank());
@@ -32,7 +32,7 @@ public class HandClassification implements Comparable<HandClassification>{
 		 * 
 		 * @return A list of ranks sorted first by the count of that rank and then by the rank itself
 		 */
-		public List<CardRank> getRanksByCount() {
+		private List<CardRank> getRanksByCount() {
 			List<CardRank> rankList = new ArrayList<CardRank>();
 			
 			Comparator<Map.Entry<CardRank, Integer>> cardRankComparator =
@@ -71,7 +71,7 @@ public class HandClassification implements Comparable<HandClassification>{
 		 * @param count The count to check for
 		 * @return True if there are exactly [count] of any single rank
 		 */
-		public boolean hasRankWithCount(int count) {
+		private boolean hasRankWithCount(int count) {
 			return hasNRanksWithCount(1, count);
 		}
 
@@ -81,7 +81,7 @@ public class HandClassification implements Comparable<HandClassification>{
 		 * @param count The count to check for
 		 * @return True if there are exactly [count] cards of each of [n] different ranks
 		 */
-		public boolean hasNRanksWithCount(int n, int count) {
+		private boolean hasNRanksWithCount(int n, int count) {
 			int foundSoFar = 0;
 			for(Map.Entry<CardRank, Integer> entry : entrySet()){
 				if(entry.getValue() == count){
