@@ -1,3 +1,15 @@
+/*******************************************************************************
+ * Copyright (c) 2013 John French & Lou Fogel
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Used in CS3733, Software Engineering at Worcester Polytechnic Institute
+ * 
+ *******************************************************************************/
+
 package cs3733.poker;
 
 import java.util.ArrayList;
@@ -10,12 +22,20 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+/**
+ * The HandClassification class represents the value of a poker hand.
+ * It can be compared to a HandClassification for a different hand to determine which hand wins.
+ * 
+ * @author John French & Lou Fogel
+ */
+
 public class HandClassification implements Comparable<HandClassification>{
 	
 	private class RankCountMap extends EnumMap<CardRank, Integer> {
 
 		private static final long serialVersionUID = 1L;
 
+		//The RankCountMap is used in getRanksByCount() to track how many of each rank is in the hand.
 		private RankCountMap(SortedSet<Card> cardSet) {
 			super(CardRank.class);
 			for(Card c : cardSet){
@@ -29,6 +49,11 @@ public class HandClassification implements Comparable<HandClassification>{
 		}
 
 		/**
+		 * This method is used to generate a sorted list of the ranks of cards which appear in this hand.
+		 * The ranks are sorted first by the number of cards of that rank in the hand.
+		 * Within ranks with the same count (e.g. the pairs of a two pair) ranks are sorted by the ranks themselves.
+		 * This helps to determine what type of hand we are dealing with (two pair, full house, etc.)
+		 * It is also useful for breaking ties between hands of the same type.
 		 * 
 		 * @return A list of ranks sorted first by the count of that rank and then by the rank itself
 		 */
@@ -110,10 +135,16 @@ public class HandClassification implements Comparable<HandClassification>{
 	
 	private final HandType type;
 	
-	//list of ranks used for tie-breaking. Most things will have only one rank, but pairs will have 2 and two-pairs will have 3.
 	private final List<CardRank> ranks;
 	
+	
+	/**
+	 * Default constructor.
+	 * @param cards The cards in the hand
+	 */
 	public HandClassification(Card[] cards){
+		
+		//Sort the cards by rank and suit.
 		Comparator<Card> cardComparator = new Comparator<Card>() {
 			@Override
 			public int compare(Card o1, Card o2) {
@@ -128,6 +159,7 @@ public class HandClassification implements Comparable<HandClassification>{
 		SortedSet<Card> cardSet = new TreeSet<>(cardComparator);
 		cardSet.addAll(Arrays.asList(cards));
 		
+		//Check for straight or flush
 		boolean straight = isStraight(cardSet);
 		boolean flush = isFlush(cardSet);
 		RankCountMap countByRank = new RankCountMap(cardSet);

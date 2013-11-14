@@ -7,6 +7,10 @@
  * http://www.eclipse.org/legal/epl-v10.html
  *
  * Used in CS3733, Software Engineering at Worcester Polytechnic Institute
+ * 
+ * Contributors:
+ * John French
+ * Lou Fogel
  *******************************************************************************/
 
 package cs3733.poker;
@@ -17,17 +21,16 @@ package cs3733.poker;
  * in the interface.
  * @version Oct 26, 2013
  */
-public class PokerHandImpl implements PokerHand
-{
-	/**
-	 * Default constructor
-	 * @param cards the five cards
-	 */
+public class PokerHandImpl implements PokerHand {
 	
 	private final Card[] cards;
-	
-	public PokerHandImpl(Card[] cards) 
-	{
+
+	/**
+	 * Default constructor
+	 * @param cards the five cards in this hand
+	 */
+		
+	public PokerHandImpl(Card[] cards){
 		this.cards = cards;
 	}
 	
@@ -35,8 +38,8 @@ public class PokerHandImpl implements PokerHand
 	 * @see cs3733.poker.PokerHand#beats(cs3733.poker.PokerHand)
 	 */
 	@Override
-	public boolean beats(PokerHand other)
-	{
+	public boolean beats(PokerHand other){
+		//We use the HandClassification class because we can't modify PokerHand so that it implements Comparable.
 		return new HandClassification(cards).compareTo(new HandClassification(other.getCards())) > 0;
 	}
 
@@ -44,8 +47,7 @@ public class PokerHandImpl implements PokerHand
 	 * @see cs3733.poker.PokerHand#getCards()
 	 */
 	@Override
-	public Card[] getCards()
-	{
+	public Card[] getCards(){
 		return cards;
 	}
 }
