@@ -15,9 +15,19 @@ public class ArgumentParserTest {
 		emptyParser = new ArgumentParser(new ArrayList<ArgumentDescriptor>());
 	}
 	
-	@Test
-	public void testCreate() {
+	@Test //#1
+	public void testCreate(){
 		assertNotNull(emptyParser);
+	}
+	
+	@Test //#2
+	public void testEmptyParserThrowsException(){
+		try {
+			emptyParser.parse(new String[]{"hello", "world"});
+		} catch (ArgumentException e) {
+			return; //pass test
+		}
+		fail("Did not throw exception!");
 	}
 
 }

@@ -44,6 +44,7 @@ public class ArgumentParser {
 	 * 	method receives a flag that is not defined in the schema.
 	 */
 	public void parse(String[] commandLineStrings) throws ArgumentException {
+		throw new ArgumentException("Arguments invalid");
 		
 	}
 	
