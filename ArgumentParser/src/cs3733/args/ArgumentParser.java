@@ -21,16 +21,14 @@ import java.util.Collection;
  * @author gpollice
  * @version Nov 16, 2013
  */
-public class ArgumentParser
-{
+public class ArgumentParser {
 	/**
 	 * Constructor that takes a schema. The schema is a collection of 
 	 * ArgumentDescriptor objects and is used by this parser to parse the arguments
 	 * from a command line.
 	 * @param schema a collection of argument descriptors for this parser to use
 	 */
-	public ArgumentParser(Collection<ArgumentDescriptor>schema)
-	{
+	public ArgumentParser(Collection<ArgumentDescriptor>schema){
 		
 	}
 	
@@ -45,8 +43,7 @@ public class ArgumentParser
 	 * @throws ArgumentException if there is an error when parsing. For example if the
 	 * 	method receives a flag that is not defined in the schema.
 	 */
-	public void parse(String[] commandLineStrings) throws ArgumentException
-	{
+	public void parse(String[] commandLineStrings) throws ArgumentException {
 		
 	}
 	
@@ -56,8 +53,7 @@ public class ArgumentParser
 	 * @return true if the flag has been defined in the last parsed command line
 	 * @throws ArgumentException if the flag given is not defined in the schema
 	 */
-	public boolean IsArgumentPresent(String flag) throws ArgumentException
-	{
+	public boolean IsArgumentPresent(String flag) throws ArgumentException {
 		return false;
 	}
 	
@@ -69,8 +65,7 @@ public class ArgumentParser
 	 * 	last parsed command line
 	 * @throws ArgumentException if the flag was not specified in the schema
 	 */
-	public String getStringArgumentValue(String flag) throws ArgumentException
-	{
+	public String getStringArgumentValue(String flag) throws ArgumentException {
 		return null;
 	}
 	
@@ -82,8 +77,7 @@ public class ArgumentParser
 	 * 	last parsed command line
 	 * @throws ArgumentException if the flag was not specified in the schema
 	 */
-	public int getIntegerArgumentValue(String flag) throws ArgumentException
-	{
+	public int getIntegerArgumentValue(String flag) throws ArgumentException {
 		return 0;
 	}
 }
