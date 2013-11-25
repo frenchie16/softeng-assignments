@@ -59,7 +59,7 @@ public class ArgumentParserSampleTest
 		final ArgumentParser parser = new ArgumentParser(schema);
 		parser.parse(new String[] {"n", "42"});
 		assertTrue(parser.IsArgumentPresent("n"));
-		assertEquals(100, parser.getIntegerArgumentValue("n"));
+		assertEquals(42, parser.getIntegerArgumentValue("n"));
 	}
 	
 	// Test #5
