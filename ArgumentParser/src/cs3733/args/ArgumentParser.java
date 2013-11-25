@@ -27,8 +27,7 @@ import java.util.Map;
 public class ArgumentParser {
 	
 	private final Collection<ArgumentDescriptor> schema;
-	
-	private final Map<String, Boolean> binaryFlags;
+	private Map<String, Boolean> parseResults;
 	
 	
 	/**
@@ -37,21 +36,8 @@ public class ArgumentParser {
 	 * from a command line.
 	 * @param schema a collection of argument descriptors for this parser to use
 	 */
-	public ArgumentParser(Collection<ArgumentDescriptor>schema){
+	public ArgumentParser(Collection<ArgumentDescriptor> schema){
 		this.schema = schema;
-		binaryFlags = new HashMap<String, Boolean>();
-		
-		for(ArgumentDescriptor ad : schema){
-			switch(ad.getArgumentType()){
-			case BINARY:
-				binaryFlags.put(ad.getFlagValue(), false);
-				break;
-			case INTEGER:
-				break;
-			case STRING:
-				break;
-			}
-		}
 	}
 	
 	/**
@@ -66,13 +52,30 @@ public class ArgumentParser {
 	 * 	method receives a flag that is not defined in the schema.
 	 */
 	public void parse(String[] commandLineStrings) throws ArgumentException {
+		
+		
+		//reset parse results from schema
+		parseResults = new HashMap<String, Boolean>();
+		
+		for(ArgumentDescriptor ad : schema){
+			switch(ad.getArgumentType()){
+			case BINARY:
+				parseResults.put(ad.getFlagValue(), false);
+				break;
+			case INTEGER:
+				break;
+			case STRING:
+				break;
+			}
+		}
+		
 		for(String s : commandLineStrings){
 			boolean matched = false;
 			for(ArgumentDescriptor ad : schema){
 				if(s.equals(ad.getFlagValue())){
 					switch(ad.getArgumentType()){
 					case BINARY:
-						binaryFlags.put(s, true);
+						parseResults.put(s, true);
 						break;
 					case INTEGER:
 						break;
@@ -96,7 +99,7 @@ public class ArgumentParser {
 	 * @throws ArgumentException if the flag given is not defined in the schema
 	 */
 	public boolean IsArgumentPresent(String flag) throws ArgumentException {
-		Boolean flagPresent = binaryFlags.get(flag);
+		Boolean flagPresent = parseResults.get(flag);
 		if(flagPresent == null) throw new ArgumentException("Nonexistant flag");
 		return flagPresent.booleanValue();
 	}
