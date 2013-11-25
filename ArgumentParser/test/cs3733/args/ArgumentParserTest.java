@@ -69,4 +69,43 @@ public class ArgumentParserTest {
 		assertTrue(basicIntParser.IsArgumentPresent("flag"));
 		assertEquals(basicIntParser.getIntegerArgumentValue("flag"), 100);
 	}
+	
+	@Test(expected=ArgumentException.class) //#8
+	public void testMissingTokenForString() throws ArgumentException {
+		basicStringParser.parse(new String[]{"flag"});
+	}
+	
+	@Test(expected=ArgumentException.class) //#8
+	public void testMissingTokenForInt() throws ArgumentException {
+		basicIntParser.parse(new String[]{"flag"});
+	}
+	
+	@Test(expected=ArgumentException.class) //#9
+	public void testBadValueForInt() throws ArgumentException {
+		basicIntParser.parse(new String[]{"flag", "foo"});
+	}
+	
+	@Test(expected=ArgumentException.class) //#10
+	public void testGetNonexistantInt() throws ArgumentException {
+		basicIntParser.parse(new String[]{"flag", "10"});
+		basicIntParser.getIntegerArgumentValue("notflag");
+	}
+	
+	@Test(expected=ArgumentException.class) //#11
+	public void testGetNonexistantString() throws ArgumentException {
+		basicStringParser.parse(new String[]{"flag", "foo"});
+		basicStringParser.getStringArgumentValue("notflag");
+	}
+	
+	@Test(expected=ArgumentException.class) //#12
+	public void testGetIntOnString() throws ArgumentException {
+		basicIntParser.parse(new String[]{"flag", "10"});
+		basicIntParser.getStringArgumentValue("flag");
+	}
+	
+	@Test(expected=ArgumentException.class) //#13
+	public void testGetStringOnInt() throws ArgumentException {
+		basicStringParser.parse(new String[]{"flag", "foo"});
+		basicStringParser.getIntegerArgumentValue("flag");
+	}
 }
