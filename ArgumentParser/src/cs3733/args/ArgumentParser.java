@@ -12,6 +12,9 @@
 package cs3733.args;
 
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 /**
  * The ArgumentParser is the main class for this assignment. When you create an
@@ -22,6 +25,12 @@ import java.util.Collection;
  * @version Nov 16, 2013
  */
 public class ArgumentParser {
+	
+	private final Collection<ArgumentDescriptor> schema;
+	
+	private final Collection<String> binaryFlags;
+	
+	
 	/**
 	 * Constructor that takes a schema. The schema is a collection of 
 	 * ArgumentDescriptor objects and is used by this parser to parse the arguments
@@ -29,7 +38,8 @@ public class ArgumentParser {
 	 * @param schema a collection of argument descriptors for this parser to use
 	 */
 	public ArgumentParser(Collection<ArgumentDescriptor>schema){
-		
+		this.schema = schema;
+		binaryFlags = new HashSet<String>();
 	}
 	
 	/**
@@ -44,8 +54,25 @@ public class ArgumentParser {
 	 * 	method receives a flag that is not defined in the schema.
 	 */
 	public void parse(String[] commandLineStrings) throws ArgumentException {
-		throw new ArgumentException("Arguments invalid");
-		
+		for(String s : commandLineStrings){
+			boolean matched = false;
+			for(ArgumentDescriptor ad : schema){
+				if(s.equals(ad.getFlagValue())){
+					switch(ad.getArgumentType()){
+					case BINARY:
+						binaryFlags.add(s);
+						break;
+					default:
+						throw new ArgumentException("Invalid argument type");
+					}
+					matched = true;
+					break;
+				}
+			}
+			if(!matched){
+				throw new ArgumentException("Invalid input on string " + s);
+			}
+		}		
 	}
 	
 	/**
@@ -55,7 +82,7 @@ public class ArgumentParser {
 	 * @throws ArgumentException if the flag given is not defined in the schema
 	 */
 	public boolean IsArgumentPresent(String flag) throws ArgumentException {
-		return false;
+		return binaryFlags.contains(flag);
 	}
 	
 	/**
