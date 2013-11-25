@@ -19,8 +19,8 @@ public class ArgumentParserAssignmentExampleTest {
 	@Before
 	public void setup(){
 		exampleSchema = new ArrayList<ArgumentDescriptor>();
-		exampleSchema.add(new ArgumentDescriptor(ArgumentType.STRING, "sourcepath", true));
-		exampleSchema.add(new ArgumentDescriptor(ArgumentType.STRING, "source", true));
+		exampleSchema.add(new ArgumentDescriptor(ArgumentType.STRING, "sourcepath", false)); //assignment is wrong and this should not be reauired
+		exampleSchema.add(new ArgumentDescriptor(ArgumentType.STRING, "source", false)); //ditto above
 		exampleSchema.add(new ArgumentDescriptor(ArgumentType.BINARY, "nowarn", true));
 		exampleParser = new ArgumentParser(exampleSchema);
 	}
@@ -50,7 +50,7 @@ public class ArgumentParserAssignmentExampleTest {
 	}
 	
 	@Test(expected=ArgumentException.class) //#5
-	public void testInvalidFlagInInput() throws ArgumentException {
+	public void test5() throws ArgumentException {
 		exampleParser.parse(new String[]{"nowarn"});
 		exampleParser.IsArgumentPresent("version");
 	}

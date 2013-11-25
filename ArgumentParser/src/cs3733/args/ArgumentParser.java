@@ -33,12 +33,14 @@ public class ArgumentParser {
 
 	private class ParseResult {
 		final ArgumentType type;
+		final boolean required;
 		boolean present;
 		String stringValue;
 		Integer intValue;
 		
-		public ParseResult(ArgumentType type){
+		public ParseResult(ArgumentType type, boolean required){
 			this.type = type;
+			this.required = required;
 			present = false;
 			stringValue = null;
 			intValue = null;
@@ -77,7 +79,7 @@ public class ArgumentParser {
 		parseResults = new HashMap<String, ParseResult>();
 		
 		for(ArgumentDescriptor ad : schema){
-			parseResults.put(ad.getFlagValue(), new ParseResult(ad.getArgumentType()));
+			parseResults.put(ad.getFlagValue(), new ParseResult(ad.getArgumentType(), ad.isRequired()));
 		}
 		
 		List<String> clsList = Arrays.asList(commandLineStrings);
@@ -113,6 +115,11 @@ public class ArgumentParser {
 				}
 				break;
 			}
+		}
+		
+		//check if any required flags are not present
+		for(ParseResult pr : parseResults.values()){
+			if(pr.required && !(pr.present)) throw new ArgumentException("Missing required argument!");
 		}
 	}
 	
