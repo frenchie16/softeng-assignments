@@ -8,11 +8,16 @@ import org.junit.Test;
 
 public class ArgumentParserTest {
 
-	private ArgumentParser emptyParser;
+	private ArgumentParser emptyParser, basicBinaryParser;
+	private ArrayList<ArgumentDescriptor> basicBinarySchema;
 	
 	@Before
 	public void setup(){
 		emptyParser = new ArgumentParser(new ArrayList<ArgumentDescriptor>());
+		
+		basicBinarySchema = new ArrayList<ArgumentDescriptor>();
+		basicBinarySchema.add(new ArgumentDescriptor(ArgumentType.BINARY, "flag", false));
+		basicBinaryParser = new ArgumentParser(basicBinarySchema);
 	}
 	
 	@Test //#1
@@ -30,4 +35,9 @@ public class ArgumentParserTest {
 		fail("Did not throw exception!");
 	}
 
+	@Test //#3
+	public void testBinaryFlagWorksWhenTrue() throws ArgumentException {
+		basicBinaryParser.parse(new String[]{"flag"});
+		assertTrue(basicBinaryParser.IsArgumentPresent("flag"));
+	}
 }
