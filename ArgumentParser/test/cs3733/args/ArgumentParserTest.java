@@ -25,19 +25,26 @@ public class ArgumentParserTest {
 		assertNotNull(emptyParser);
 	}
 	
-	@Test //#2
-	public void testEmptyParserThrowsException(){
-		try {
-			emptyParser.parse(new String[]{"hello", "world"});
-		} catch (ArgumentException e) {
-			return; //pass test
-		}
-		fail("Did not throw exception!");
+	@Test(expected=ArgumentException.class) //#2
+	public void testEmptyParserThrowsException() throws ArgumentException{
+		emptyParser.parse(new String[]{"hello", "world"});
 	}
 
 	@Test //#3
 	public void testBinaryFlagWorksWhenTrue() throws ArgumentException {
 		basicBinaryParser.parse(new String[]{"flag"});
 		assertTrue(basicBinaryParser.IsArgumentPresent("flag"));
+	}
+	
+	@Test //#4
+	public void testBinaryFlagWorksWhenFalse() throws ArgumentException {
+		basicBinaryParser.parse(new String[]{});
+		assertFalse(basicBinaryParser.IsArgumentPresent("flag"));
+	}
+	
+	@Test(expected=ArgumentException.class) //#5
+	public void testInvalidFlagInInput() throws ArgumentException {
+		basicBinaryParser.parse(new String[]{"flag"});
+		basicBinaryParser.IsArgumentPresent("notflag");
 	}
 }
