@@ -128,4 +128,14 @@ public class ArgumentParserTest {
 	public void testMissingRequiredBinary() throws ArgumentException {
 		advancedParser.parse(new String[]{"int", "5", "str", "foo"});
 	}
+	
+	@Test(expected=ArgumentException.class) //#16
+	public void testMissingRequiredString() throws ArgumentException {
+		advancedParser.parse(new String[]{"int", "5", "bool"});
+	}
+	
+	@Test(expected=ArgumentException.class) //#17
+	public void testMissingRequiredInt() throws ArgumentException {
+		advancedParser.parse(new String[]{"bool", "str", "foo"});
+	}
 }
