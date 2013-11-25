@@ -8,8 +8,8 @@ import org.junit.Test;
 
 public class ArgumentParserTest {
 
-	private ArgumentParser emptyParser, basicBinaryParser;
-	private ArrayList<ArgumentDescriptor> basicBinarySchema;
+	private ArgumentParser emptyParser, basicBinaryParser, basicStringParser;
+	private ArrayList<ArgumentDescriptor> basicBinarySchema, basicStringSchema;
 	
 	@Before
 	public void setup(){
@@ -18,6 +18,10 @@ public class ArgumentParserTest {
 		basicBinarySchema = new ArrayList<ArgumentDescriptor>();
 		basicBinarySchema.add(new ArgumentDescriptor(ArgumentType.BINARY, "flag", false));
 		basicBinaryParser = new ArgumentParser(basicBinarySchema);
+		
+		basicStringSchema = new ArrayList<ArgumentDescriptor>();
+		basicBinarySchema.add(new ArgumentDescriptor(ArgumentType.STRING, "flag", false));
+		basicStringParser = new ArgumentParser(basicStringSchema);
 	}
 	
 	@Test //#1
@@ -46,5 +50,12 @@ public class ArgumentParserTest {
 	public void testInvalidFlagInInput() throws ArgumentException {
 		basicBinaryParser.parse(new String[]{"flag"});
 		basicBinaryParser.IsArgumentPresent("notflag");
+	}
+	
+	@Test //#6
+	public void testStringFlagWorksWhenPresent() throws ArgumentException {
+		basicStringParser.parse(new String[]{"flag", "foo"});
+		assertTrue(basicStringParser.IsArgumentPresent("flag"));
+		assertTrue(basicStringParser.getStringArgumentValue("flag").equals("foo"));
 	}
 }
