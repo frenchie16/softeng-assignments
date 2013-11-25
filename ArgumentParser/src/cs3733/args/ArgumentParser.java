@@ -11,10 +11,15 @@
 
 package cs3733.args;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 /**
  * The ArgumentParser is the main class for this assignment. When you create an
@@ -25,9 +30,23 @@ import java.util.Map;
  * @version Nov 16, 2013
  */
 public class ArgumentParser {
-	
+
+	private class ParseResult {
+		final ArgumentType type;
+		boolean present;
+		String stringValue;
+		Integer intValue;
+		
+		public ParseResult(ArgumentType type){
+			this.type = type;
+			present = false;
+			stringValue = null;
+			intValue = null;
+		}
+	}
+
 	private final Collection<ArgumentDescriptor> schema;
-	private Map<String, Boolean> parseResults;
+	private Map<String, ParseResult> parseResults;
 	
 	
 	/**
@@ -55,39 +74,44 @@ public class ArgumentParser {
 		
 		
 		//reset parse results from schema
-		parseResults = new HashMap<String, Boolean>();
+		parseResults = new HashMap<String, ParseResult>();
 		
 		for(ArgumentDescriptor ad : schema){
-			switch(ad.getArgumentType()){
-			case BINARY:
-				parseResults.put(ad.getFlagValue(), false);
-				break;
-			case INTEGER:
-				break;
-			case STRING:
-				break;
-			}
+			parseResults.put(ad.getFlagValue(), new ParseResult(ad.getArgumentType()));
 		}
 		
-		for(String s : commandLineStrings){
-			boolean matched = false;
-			for(ArgumentDescriptor ad : schema){
-				if(s.equals(ad.getFlagValue())){
-					switch(ad.getArgumentType()){
-					case BINARY:
-						parseResults.put(s, true);
-						break;
-					case INTEGER:
-						break;
-					case STRING:
-						break;
-					}
-					matched = true;
-					break;
+		List<String> clsList = Arrays.asList(commandLineStrings);
+		Iterator<String> clIterator = clsList.iterator();
+		while(clIterator.hasNext()){
+			ParseResult pr = parseResults.get(clIterator.next());
+			if(pr == null) throw new ArgumentException("Invalid flag");
+			
+			//the flag is present so set that
+			pr.present = true;
+			
+			//set value as appropriate
+			switch(pr.type){
+			case BINARY:
+				//we already set present, nothing more to do
+				break;
+			case INTEGER:
+				//set the int value
+				try {
+					pr.intValue = Integer.parseInt(clIterator.next());
+				} catch (NoSuchElementException e){
+					throw new ArgumentException("Bad number of tokens!");
+				} catch (NumberFormatException e){
+					throw new ArgumentException("Invalid value for integer flag!");
 				}
-			}
-			if(!matched){
-				throw new ArgumentException("Invalid input on string " + s);
+				break;
+			case STRING:
+				//set the string value
+				try {
+					pr.stringValue = clIterator.next();
+				} catch (NoSuchElementException e){
+					throw new ArgumentException("Bad number of tokens!");
+				}
+				break;
 			}
 		}
 	}
@@ -99,9 +123,9 @@ public class ArgumentParser {
 	 * @throws ArgumentException if the flag given is not defined in the schema
 	 */
 	public boolean IsArgumentPresent(String flag) throws ArgumentException {
-		Boolean flagPresent = parseResults.get(flag);
-		if(flagPresent == null) throw new ArgumentException("Nonexistant flag");
-		return flagPresent.booleanValue();
+		ParseResult pr = parseResults.get(flag);
+		if(pr == null) throw new ArgumentException("Nonexistant flag");
+		return pr.present;
 	}
 	
 	/**
@@ -113,7 +137,10 @@ public class ArgumentParser {
 	 * @throws ArgumentException if the flag was not specified in the schema
 	 */
 	public String getStringArgumentValue(String flag) throws ArgumentException {
-		return null;
+		ParseResult pr = parseResults.get(flag);
+		if(pr == null) throw new ArgumentException("Nonexistant flag");
+		if(pr.type != ArgumentType.STRING) throw new ArgumentException("Not a string flag");
+		return pr.stringValue;
 	}
 	
 	/**

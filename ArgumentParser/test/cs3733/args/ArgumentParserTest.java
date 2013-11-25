@@ -20,7 +20,7 @@ public class ArgumentParserTest {
 		basicBinaryParser = new ArgumentParser(basicBinarySchema);
 		
 		basicStringSchema = new ArrayList<ArgumentDescriptor>();
-		basicBinarySchema.add(new ArgumentDescriptor(ArgumentType.STRING, "flag", false));
+		basicStringSchema.add(new ArgumentDescriptor(ArgumentType.STRING, "flag", false));
 		basicStringParser = new ArgumentParser(basicStringSchema);
 	}
 	
