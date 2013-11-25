@@ -8,8 +8,8 @@ import org.junit.Test;
 
 public class ArgumentParserTest {
 
-	private ArgumentParser emptyParser, basicBinaryParser, basicStringParser, basicIntParser;
-	private ArrayList<ArgumentDescriptor> basicBinarySchema, basicStringSchema, basicIntSchema;
+	private ArgumentParser emptyParser, basicBinaryParser, basicStringParser, basicIntParser, advancedParser;
+	private ArrayList<ArgumentDescriptor> basicBinarySchema, basicStringSchema, basicIntSchema, advancedSchema;
 	
 	@Before
 	public void setup(){
@@ -26,6 +26,13 @@ public class ArgumentParserTest {
 		basicIntSchema = new ArrayList<ArgumentDescriptor>();
 		basicIntSchema.add(new ArgumentDescriptor(ArgumentType.INTEGER, "flag", false));
 		basicIntParser = new ArgumentParser(basicIntSchema);
+		
+		advancedSchema = new ArrayList<ArgumentDescriptor>();
+		advancedSchema.add(new ArgumentDescriptor(ArgumentType.INTEGER, "int", true));
+		advancedSchema.add(new ArgumentDescriptor(ArgumentType.STRING, "str", true));
+		advancedSchema.add(new ArgumentDescriptor(ArgumentType.BINARY, "bool", true));
+		advancedParser = new ArgumentParser(advancedSchema);
+		
 	}
 	
 	@Test //#1
@@ -107,5 +114,18 @@ public class ArgumentParserTest {
 	public void testGetStringOnInt() throws ArgumentException {
 		basicStringParser.parse(new String[]{"flag", "foo"});
 		basicStringParser.getIntegerArgumentValue("flag");
+	}
+	
+	@Test //#14
+	public void testMixedTypes() throws ArgumentException {
+		advancedParser.parse(new String[]{"int", "5", "bool", "str", "foo"});
+		assertTrue(advancedParser.IsArgumentPresent("bool"));
+		assertTrue(advancedParser.getStringArgumentValue("str").equals("foo"));
+		assertEquals(advancedParser.getIntegerArgumentValue("int"), 5);
+	}
+	
+	@Test(expected=ArgumentException.class) //#15
+	public void testMissingRequiredBinary() throws ArgumentException {
+		advancedParser.parse(new String[]{"int", "5", "str", "foo"});
 	}
 }
