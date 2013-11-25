@@ -152,6 +152,9 @@ public class ArgumentParser {
 	 * @throws ArgumentException if the flag was not specified in the schema
 	 */
 	public int getIntegerArgumentValue(String flag) throws ArgumentException {
-		return 0;
+		ParseResult pr = parseResults.get(flag);
+		if(pr == null) throw new ArgumentException("Nonexistant flag");
+		if(pr.type != ArgumentType.INTEGER) throw new ArgumentException("Not an int flag");
+		return pr.intValue;
 	}
 }
