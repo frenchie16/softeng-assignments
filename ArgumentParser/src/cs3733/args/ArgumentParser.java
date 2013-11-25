@@ -28,7 +28,7 @@ public class ArgumentParser {
 	
 	private final Collection<ArgumentDescriptor> schema;
 	
-	private final Collection<String> binaryFlags;
+	private final Map<String, Boolean> binaryFlags;
 	
 	
 	/**
@@ -39,7 +39,19 @@ public class ArgumentParser {
 	 */
 	public ArgumentParser(Collection<ArgumentDescriptor>schema){
 		this.schema = schema;
-		binaryFlags = new HashSet<String>();
+		binaryFlags = new HashMap<String, Boolean>();
+		
+		for(ArgumentDescriptor ad : schema){
+			switch(ad.getArgumentType()){
+			case BINARY:
+				binaryFlags.put(ad.getFlagValue(), false);
+				break;
+			case INTEGER:
+				break;
+			case STRING:
+				break;
+			}
+		}
 	}
 	
 	/**
@@ -60,10 +72,12 @@ public class ArgumentParser {
 				if(s.equals(ad.getFlagValue())){
 					switch(ad.getArgumentType()){
 					case BINARY:
-						binaryFlags.add(s);
+						binaryFlags.put(s, true);
 						break;
-					default:
-						throw new ArgumentException("Invalid argument type");
+					case INTEGER:
+						break;
+					case STRING:
+						break;
 					}
 					matched = true;
 					break;
@@ -72,7 +86,7 @@ public class ArgumentParser {
 			if(!matched){
 				throw new ArgumentException("Invalid input on string " + s);
 			}
-		}		
+		}
 	}
 	
 	/**
@@ -82,7 +96,9 @@ public class ArgumentParser {
 	 * @throws ArgumentException if the flag given is not defined in the schema
 	 */
 	public boolean IsArgumentPresent(String flag) throws ArgumentException {
-		return binaryFlags.contains(flag);
+		Boolean flagPresent = binaryFlags.get(flag);
+		if(flagPresent == null) throw new ArgumentException("Nonexistant flag");
+		return flagPresent.booleanValue();
 	}
 	
 	/**
